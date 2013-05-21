@@ -1,0 +1,101 @@
+<html>
+<head>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<style>
+	#page1{
+	background: url(images/bg2.jpg);
+}
+</style>
+</head>
+<body >
+
+<script>
+var todolist=[];
+var addedtolist=[];
+var i=0;
+$(".swipe").swiperight(function() {
+    var x1=$(this).attr('id');
+	var x2=x1[8];
+	var x3="#listpage"+x2;
+    $.mobile.changePage(x3);
+	//Untested , cant swipe with mouse.
+});
+
+function cookies(){
+    var size=$.cookie("size");
+	for (j=0;j<size;j++){
+		text2=$.cookie("cookie"+j);
+		todolist.push(text2);
+		checklist();
+	}
+	$("#load").fadeOut("slow");
+
+}
+function changetext(val){
+    todolist.push(val);
+	text2=val;
+	checklist();
+	var theDiv=document.getElementById('textinput1');
+	theDiv.value=' ' ; //Clears the input after Enter is pressed
+	
+}
+function savebutton(){
+	var cookiestring="";
+    $.cookie("size",todolist.length);
+    for (i=0;i<todolist.length;i++){
+		$.cookie("cookie"+i, todolist[i]);
+		//$.cookie("cookie"+i, todolist[i],{ expires: 7 }); => Cookie that last for 7 days 
+	}
+}
+
+
+function checklist(){
+    var today = new Date();
+    var dd = today.getDate();
+	 addedtolist.push(dd);
+    $('<p><input id="checkbox'+i+'" class="swipe" name="" data-theme="e" type="checkbox"><label for="checkbox'+i+'">'+text2+'</label></p>').appendTo('#two').trigger( "create" );
+	$('<div data-role="page" id="listpage'+i+'"><header data-role="header"><h1>'+text2+'</h1><a href="#page1" data-icon="grid" data-iconpos="notext">Back to List</a></header>'+addedtolist[i]+'</div>').appendTo('body').trigger( "create" );
+	
+	i++;
+    
+	
+	
+}
+
+             
+
+</script>
+
+<div data-role="page" id="page1">
+    <div data-theme="e" data-role="header">
+        <h3>
+            Your To Do List:
+        </h3>
+    </div>
+    <div id="two" data-role="content">
+	<a data-role="button" id="load" data-theme="e" href="#page1" onclick="cookies()">
+            Load Your To-Do List!
+        </a>
+        <div data-role="fieldcontain">
+            <input name="" id="textinput1" placeholder="Add to To-Do List" value="" type="text" onchange="changetext(this.value)">
+        </div>
+      
+        <div id="checkboxes1" data-role="fieldcontain">
+            <fieldset data-role="controlgroup" data-type="vertical" id="one">
+                
+                
+             
+            </fieldset>
+        </div>
+		 
+    </div>
+	<a data-role="button" data-theme="e" href="#page1" onclick="savebutton()">
+            Save To-Do List!
+        </a>
+		
+</div>
+</body>
+</html>
